@@ -1,6 +1,6 @@
 {
   "name": "cucumber-mb-summary-formatter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -18,6 +18,9 @@
     "@babel/plugin-proposal-function-bind": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/register": "^7.0.0",
+    "cucumber": "^5.1.0"
+  },
+  "peerDependencies": {
     "cucumber": "^5.1.0"
   }
 }

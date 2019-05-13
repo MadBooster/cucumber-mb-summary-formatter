@@ -36,7 +36,7 @@ export default class SummaryFormatter extends Formatter {
       } = this.eventDataCollector.getTestCaseData(testCase.sourceLocation)
       const failureStep = failureCase.steps[index]
       if(failureStep && failureStep.sourceLocation) {
-        this.log(this.colorFns[status](`\Feature: ${pickle.name} / Step: ${failureStep.sourceLocation.uri}:${failureStep.sourceLocation.line})\n`))
+        this.log(this.colorFns[status](`\nFeature: ${pickle.name} / Step: ${failureStep.sourceLocation.uri}:${failureStep.sourceLocation.line})\n`))
       } else {
         this.log(this.colorFns[status](`\nBefore/after hook @ scenario: ${pickle.name} (${testCase.sourceLocation.uri}:${testCase.sourceLocation.line})\n`))
       }
