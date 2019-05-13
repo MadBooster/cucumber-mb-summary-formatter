@@ -1,0 +1,23 @@
+{
+  "name": "cucumber-mb-summary-formatter",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "unit-test": "mocha src",
+    "build-local": "babel src -d lib --ignore '**/*_spec.js'",
+    "prepublish": "npm run build-local"
+  },
+  "author": "Tomi Nokkala <tomi.nokkala@madbooster.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-function-bind": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/register": "^7.0.0",
+    "cucumber": "^5.1.0"
+  }
+}
