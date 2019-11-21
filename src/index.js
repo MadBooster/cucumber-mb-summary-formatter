@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { formatSummary } from 'cucumber/lib/formatter/helpers'
+import { formatSummary, isFailure, isWarning } from 'cucumber/lib/formatter/helpers'
 import { formatIssue } from './issue_helpers'
 import Formatter from 'cucumber/lib/formatter/'
 import Status from 'cucumber/lib/status'
@@ -33,7 +33,7 @@ export default class SummaryFormatter extends Formatter {
         gherkinDocument,
         pickle,
         testCase: failureCase
-      } = this.eventDataCollector.getTestCaseData(testCase.sourceLocation)
+      } = this.eventDataCollector.getTestCaseAttempt(testCase)
       const failureStep = failureCase.steps[index]
       if(failureStep && failureStep.sourceLocation) {
         this.log(this.colorFns[status](`\nFeature: ${pickle.name} / Step: ${failureStep.sourceLocation.uri}:${failureStep.sourceLocation.line})\n`))
@@ -57,11 +57,12 @@ export default class SummaryFormatter extends Formatter {
   logSummary = (testRun) => {
     const failures = []
     const warnings = []
-    _.each(this.eventDataCollector.testCaseMap, testCase => {
-      if (this.isTestCaseFailure(testCase)) {
-        failures.push(testCase)
-      } else if (this.isTestCaseWarning(testCase)) {
-        warnings.push(testCase)
+    const testCaseAttempts = this.eventDataCollector.getTestCaseAttempts()
+    _.each(testCaseAttempts, testCaseAttempt => {
+      if (isFailure(testCaseAttempt.result)) {
+        failures.push(testCaseAttempt)
+      } else if (isWarning(testCaseAttempt.result)) {
+        warnings.push(testCaseAttempt)
       }
     })
     if (failures.length > 0) {
@@ -73,7 +74,7 @@ export default class SummaryFormatter extends Formatter {
     this.log(
       formatSummary({
         colorFns: this.colorFns,
-        testCaseMap: this.eventDataCollector.testCaseMap,
+        testCaseAttempts,
         testRun,
       })
     )
@@ -81,19 +82,13 @@ export default class SummaryFormatter extends Formatter {
 
   logIssues = ({ issues, title }) => {
     this.log(`${title}:\n\n`)
-    issues.forEach((testCase, index) => {
-      const {
-        gherkinDocument,
-        pickle,
-      } = this.eventDataCollector.getTestCaseData(testCase.sourceLocation)
+    issues.forEach((testCaseAttempt, index) => {
       this.log(
         formatIssue({
           colorFns: this.colorFns,
-          gherkinDocument,
           number: index + 1,
-          pickle,
           snippetBuilder: this.snippetBuilder,
-          testCase,
+          testCaseAttempt,
         })
       )
     })
