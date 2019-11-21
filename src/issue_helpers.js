@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { formatLocation } from 'cucumber/lib/formatter/helpers/location_helpers'
-import { getStepMessage } from 'cucumber/lib/formatter/helpers/step_result_helpers'
+import { getStepMessage } from 'cucumber/lib/formatter/helpers/test_case_attempt_formatter'
 import indentString from 'indent-string'
 import Status from 'cucumber/lib/status'
 import figures from 'figures'
