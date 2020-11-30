@@ -19,8 +19,26 @@ export default class SummaryFormatter extends Formatter {
       this.log('\n\n')
     })
     super(options)
+    options.eventBroadcaster.on('pickle-accepted', this.incrementStepCount)
     options.eventBroadcaster.on('test-step-finished', this.logProgress)
+    options.eventBroadcaster.on('test-case-finished', this.logStepProgress)
     options.eventBroadcaster.on('test-run-finished', this.logSummary)
+    this.numberOfSteps = 0
+    this.numberOfScenarios = 0
+    this.currentScenarioCount = 1
+  }
+
+  incrementStepCount = ({ pickle, ...rest }) => {
+    this.numberOfSteps += pickle.steps.length
+    this.numberOfScenarios++
+  }
+
+  logStepProgress = (data) => {
+    const { attemptNumber, result } = data
+    this.log(`${this.currentScenarioCount}/${this.numberOfScenarios} ${attemptNumber > 1 ? `(try ${attemptNumber})` : ''}\n`)
+    if(!(result.status === Status.FAILED && result.retried)) {
+      this.currentScenarioCount++
+    }
   }
 
   logProgress = (data) => {
@@ -28,7 +46,7 @@ export default class SummaryFormatter extends Formatter {
     const { status } = result
     const character = this.colorFns[status](STATUS_CHARACTER_MAPPING[status])
     this.log(character)
-    if(this.isTestCaseFailure(data)) {
+    if(isFailure(data)) {
       const {
         gherkinDocument,
         pickle,
@@ -41,17 +59,6 @@ export default class SummaryFormatter extends Formatter {
         this.log(this.colorFns[status](`\nBefore/after hook @ scenario: ${pickle.name} (${testCase.sourceLocation.uri}:${testCase.sourceLocation.line})\n`))
       }
     }
-  }
-
-  isTestCaseFailure = (testCase) => {
-    return _.includes([Status.AMBIGUOUS, Status.FAILED], testCase.result.status)
-  }
-
-  isTestCaseWarning = (testCase) => {
-    return _.includes(
-      [Status.PENDING, Status.UNDEFINED],
-      testCase.result.status
-    )
   }
 
   logSummary = (testRun) => {
