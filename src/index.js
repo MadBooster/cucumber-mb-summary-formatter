@@ -1,6 +1,7 @@
 import SummaryFormatter from '@cucumber/cucumber/lib/formatter/summary_formatter'
 import { isFailure } from '@cucumber/cucumber/lib/formatter/helpers/issue_helpers'
 import Status from '@cucumber/cucumber/lib/status'
+import { formatIssue } from './issue_helpers'
 
 const STATUS_CHARACTER_MAPPING = {
   [Status.AMBIGUOUS]: 'A',
@@ -73,5 +74,21 @@ export default class MbSummaryFormatter extends SummaryFormatter {
         console.error('Error on formatter', e)
       }
     }
+  }
+
+  logIssues({ issues, title }) {
+    this.log(`${title}:\n\n`)
+    issues.forEach((testCaseAttempt, index) => {
+      this.log(
+        formatIssue({
+          colorFns: this.colorFns,
+          cwd: this.cwd,
+          number: index + 1,
+          snippetBuilder: this.snippetBuilder,
+          supportCodeLibrary: this.supportCodeLibrary,
+          testCaseAttempt
+        })
+      )
+    })
   }
 }
