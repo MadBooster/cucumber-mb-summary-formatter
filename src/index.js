@@ -2,6 +2,8 @@ import SummaryFormatter from '@cucumber/cucumber/lib/formatter/summary_formatter
 import { isFailure } from '@cucumber/cucumber/lib/formatter/helpers/issue_helpers'
 import Status from '@cucumber/cucumber/lib/status'
 import { formatIssue } from './issue_helpers'
+import { getGherkinScenarioLocationMap, getGherkinStepMap } from '@cucumber/cucumber/lib/formatter/helpers/gherkin_document_parser'
+import { getPickleStepMap } from '@cucumber/cucumber/lib/formatter/helpers/pickle_parser'
 
 const STATUS_CHARACTER_MAPPING = {
   [Status.AMBIGUOUS]: 'A',
@@ -59,16 +61,21 @@ export default class MbSummaryFormatter extends SummaryFormatter {
     if(isFailure(testStepResult)) {
       try {
         const testCaseAttempt = this.eventDataCollector.getTestCaseAttempt(testCaseStartedId)
+
+        const { gherkinDocument, pickle } = testCaseAttempt
+        const gherkinStepMap = getGherkinStepMap(gherkinDocument)
+        const gherkinScenarioLocationMap = getGherkinScenarioLocationMap(gherkinDocument)
+        const pickleStepMap = getPickleStepMap(pickle)
+
         const failureStep = testCaseAttempt.testCase.testSteps.find(step => step.id === testStepId)
-        const failureStepData = testCaseAttempt.pickle.steps.find(step => step.id === failureStep.pickleStepId)
-        const failurePickleAstNodeId = testCaseAttempt.pickle.astNodeIds[0]
-        const failureScenario = testCaseAttempt.gherkinDocument.feature.children.find(scenario => (scenario.scenario ? scenario.scenario.id : scenario.background.id) === failurePickleAstNodeId)
-        if(failureStep && failureStep.pickleStepId) {
-          const failureStepAstData = failureScenario.scenario.steps.find(step => step.id === failureStepData.astNodeIds[0])
-          this.log(this.colorFns.forStatus(status)(`\nFeature: ${testCaseAttempt.pickle.name} / Step: "${failureStepData.text}" (${testCaseAttempt.pickle.uri}:${failureStepAstData.location.line})\n`))
+
+        if(failureStep.pickleStepId !== '') {
+          const failureStepData = pickleStepMap[failureStep.pickleStepId]
+          const line = gherkinStepMap[failureStepData.astNodeIds[0]].location.line
+          this.log(this.colorFns.forStatus(status)(`\nFeature: ${pickle.name} / Step: "${failureStepData.text}" (${pickle.uri}:${line})\n`))
         } else {
-          const failureScenarioAstData = (failureScenario.scenario ? failureScenario.scenario : failureScenario.background)
-          this.log(this.colorFns.forStatus(status)(`\nBefore/after hook @ scenario: ${testCaseAttempt.pickle.name} (${testCaseAttempt.pickle.uri}:${failureScenarioAstData.location.line}))\n`))
+          const line = gherkinScenarioLocationMap[pickle.astNodeIds[0]].line
+          this.log(this.colorFns.forStatus(status)(`\nBefore/after hook @ scenario: ${pickle.name} (${pickle.uri}:${line}))\n`))
         }
       } catch(e) {
         console.error('Error on formatter', e)
