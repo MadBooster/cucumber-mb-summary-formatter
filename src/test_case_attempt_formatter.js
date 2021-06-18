@@ -1,29 +1,29 @@
 import indentString from 'indent-string'
-import Status from '@cucumber/cucumber/lib/status'
 import figures from 'figures'
+import { TestStepResultStatus } from '@cucumber/messages'
 import { doesHaveValue, valueOrDefault } from '@cucumber/cucumber/lib/value_checker'
 import { formatLocation, isIssue, parseTestCaseAttempt } from '@cucumber/cucumber/lib/formatter/helpers'
 import { formatStepArgument } from '@cucumber/cucumber/lib/formatter/helpers/step_argument_formatter'
 
 const CHARACTERS = {
-  [Status.AMBIGUOUS]: figures.cross,
-  [Status.FAILED]: figures.cross,
-  [Status.PASSED]: figures.tick,
-  [Status.PENDING]: '?',
-  [Status.SKIPPED]: '-',
-  [Status.UNDEFINED]: '?'
+  [TestStepResultStatus.AMBIGUOUS]: figures.cross,
+  [TestStepResultStatus.FAILED]: figures.cross,
+  [TestStepResultStatus.PASSED]: figures.tick,
+  [TestStepResultStatus.PENDING]: '?',
+  [TestStepResultStatus.SKIPPED]: '-',
+  [TestStepResultStatus.UNDEFINED]: '?'
 }
 
 function getStepMessage(testStep) {
   switch(testStep.result.status) {
-    case Status.AMBIGUOUS:
-    case Status.FAILED:
+    case TestStepResultStatus.AMBIGUOUS:
+    case TestStepResultStatus.FAILED:
       return testStep.result.message
-    case Status.UNDEFINED:
+    case TestStepResultStatus.UNDEFINED:
       return `${
         'Undefined. Implement with the following snippet:' + '\n\n'
       }${indentString(testStep.snippet, 2)}\n`
-    case Status.PENDING:
+    case TestStepResultStatus.PENDING:
       return 'Pending'
   }
   return ''

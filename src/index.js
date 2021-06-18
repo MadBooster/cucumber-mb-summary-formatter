@@ -1,17 +1,18 @@
+
+import { TestStepResultStatus } from '@cucumber/messages'
 import SummaryFormatter from '@cucumber/cucumber/lib/formatter/summary_formatter'
 import { isFailure } from '@cucumber/cucumber/lib/formatter/helpers/issue_helpers'
-import Status from '@cucumber/cucumber/lib/status'
 import { formatIssue } from './issue_helpers'
 import { getGherkinScenarioLocationMap, getGherkinStepMap } from '@cucumber/cucumber/lib/formatter/helpers/gherkin_document_parser'
 import { getPickleStepMap } from '@cucumber/cucumber/lib/formatter/helpers/pickle_parser'
 
 const STATUS_CHARACTER_MAPPING = {
-  [Status.AMBIGUOUS]: 'A',
-  [Status.FAILED]: 'F',
-  [Status.PASSED]: '.',
-  [Status.PENDING]: 'P',
-  [Status.SKIPPED]: '-',
-  [Status.UNDEFINED]: 'U'
+  [TestStepResultStatus.AMBIGUOUS]: 'A',
+  [TestStepResultStatus.FAILED]: 'F',
+  [TestStepResultStatus.PASSED]: '.',
+  [TestStepResultStatus.PENDING]: 'P',
+  [TestStepResultStatus.SKIPPED]: '-',
+  [TestStepResultStatus.UNDEFINED]: 'U'
 }
 
 export default class MbSummaryFormatter extends SummaryFormatter {
@@ -25,8 +26,8 @@ export default class MbSummaryFormatter extends SummaryFormatter {
   }
 
   parseEnvelope = envelope => {
-    if(envelope.pickle != null) {
-      this.incrementStepCount(envelope.pickle)
+    if(envelope.testCase != null) {
+      this.incrementStepCount(envelope.testCase)
     } else if(envelope.testStepFinished != null) {
       this.logProgress(envelope.testStepFinished)
     } else if(envelope.testCaseFinished != null) {
@@ -36,18 +37,18 @@ export default class MbSummaryFormatter extends SummaryFormatter {
     }
   }
 
-  incrementStepCount = (pickle) => {
-    this.numberOfSteps += pickle.steps.length
+  incrementStepCount = (testCase) => {
+    this.numberOfSteps += testCase.testSteps.length
     this.numberOfScenarios++
   }
 
   logStepProgress = (testCaseFinished) => {
     const testCaseAttempt = this.eventDataCollector.getTestCaseAttempt(testCaseFinished.testCaseStartedId)
     const { attempt, worstTestStepResult } = testCaseAttempt
-    if(worstTestStepResult.status === Status.FAILED && !worstTestStepResult.willBeRetried) {
+    if(worstTestStepResult.status === TestStepResultStatus.FAILED && !worstTestStepResult.willBeRetried) {
       this.failureCount++
     }
-    this.log(`${this.currentScenarioCount}/${this.numberOfScenarios} ${attempt > 0 ? `(try ${attempt + 1})` : ''} ${this.failureCount > 0 ? this.colorFns.forStatus(Status.FAILED)(`(failed: ${this.failureCount})`) : ''}\n`)
+    this.log(`${this.currentScenarioCount}/${this.numberOfScenarios} ${attempt > 0 ? `(try ${attempt + 1})` : ''} ${this.failureCount > 0 ? this.colorFns.forStatus(TestStepResultStatus.FAILED)(`(failed: ${this.failureCount})`) : ''}\n`)
     if(!worstTestStepResult.willBeRetried) {
       this.currentScenarioCount++
     }

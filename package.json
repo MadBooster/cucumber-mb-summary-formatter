@@ -1,6 +1,6 @@
 {
   "name": "cucumber-mb-summary-formatter",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "@babel/plugin-proposal-function-bind": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
     "@babel/register": "^7.12.1",
-    "@cucumber/cucumber": "^7.2.1",
+    "@cucumber/cucumber": "^7.3.0",
     "eslint": "^7.25.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
@@ -27,6 +27,6 @@
     "eslint-plugin-promise": "^5.1.0"
   },
   "peerDependencies": {
-    "@cucumber/cucumber": "^7.2.1"
+    "@cucumber/cucumber": "^7.3.0"
   }
 }
