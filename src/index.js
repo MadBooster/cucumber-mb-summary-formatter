@@ -70,7 +70,7 @@ export default class MbSummaryFormatter extends SummaryFormatter {
 
         const failureStep = testCaseAttempt.testCase.testSteps.find(step => step.id === testStepId)
 
-        if(failureStep.pickleStepId !== '') {
+        if(failureStep.pickleStepId) {
           const failureStepData = pickleStepMap[failureStep.pickleStepId]
           const line = gherkinStepMap[failureStepData.astNodeIds[0]].location.line
           this.log(this.colorFns.forStatus(status)(`\nFeature: ${pickle.name} / Step: "${failureStepData.text}" (${pickle.uri}:${line})\n`))
