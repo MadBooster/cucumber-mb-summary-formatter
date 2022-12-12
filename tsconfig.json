@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "module": "none",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2019",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "lib/test",
+
+  },
+  "include": [
+    "test/**/*"
+  ],
+  "exclude": [
+    "**/node_modules",
+  ],
+  "compileOnSave": true
+}

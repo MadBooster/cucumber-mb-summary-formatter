@@ -2,8 +2,12 @@ import indentString from 'indent-string'
 import figures from 'figures'
 import { TestStepResultStatus } from '@cucumber/messages'
 import { doesHaveValue, valueOrDefault } from '@cucumber/cucumber/lib/value_checker'
-import { formatLocation, isIssue, parseTestCaseAttempt } from '@cucumber/cucumber/lib/formatter/helpers'
 import { formatStepArgument } from '@cucumber/cucumber/lib/formatter/helpers/step_argument_formatter'
+import {
+  formatterHelpers
+} from '@cucumber/cucumber'
+
+const { formatLocation, isIssue, parseTestCaseAttempt } = formatterHelpers
 
 const CHARACTERS = {
   [TestStepResultStatus.AMBIGUOUS]: figures.cross,

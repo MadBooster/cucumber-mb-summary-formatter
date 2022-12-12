@@ -1,13 +1,19 @@
 {
   "name": "cucumber-mb-summary-formatter",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "unit-test": "mocha src",
     "build-local": "babel src -d lib --ignore '**/*_spec.js'",
-    "prepare": "npm run build-local"
+    "prepare": "npm run build-local",
+    "test:mocha": "mocha",
+    "test:nobuild": "npm run test:mocha",
+    "test": "npm run build:clean:tests && npm run build-local && npm run build && npm run test:mocha",
+    "build:clean:tests": "rm -rf lib/test",
+    "build:clean": "rm -rf lib",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "build": "tsc -p tsconfig.json"
   },
   "author": "Tomi Nokkala <tomi.nokkala@madbooster.com>",
   "license": "ISC",
@@ -19,14 +25,21 @@
     "@babel/plugin-proposal-function-bind": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
     "@babel/register": "^7.12.1",
-    "@cucumber/cucumber": "^7.3.0",
+    "@cucumber/cucumber": "^8.7.0",
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.11.9",
     "eslint": "^7.25.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0"
+    "eslint-plugin-promise": "^5.1.0",
+    "mocha": "^10.1.0",
+    "should": "^13.2.3",
+    "stream-to-string": "^1.2.0",
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
-    "@cucumber/cucumber": "^7.3.0"
+    "@cucumber/cucumber": "^8.7.0"
   }
 }
