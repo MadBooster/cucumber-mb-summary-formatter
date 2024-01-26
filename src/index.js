@@ -2,7 +2,7 @@
 import { TestStepResultStatus } from '@cucumber/messages'
 import SummaryFormatter from '@cucumber/cucumber/lib/formatter/summary_formatter'
 import { isFailure } from '@cucumber/cucumber/lib/formatter/helpers/issue_helpers'
-import { formatIssue } from './issue_helpers'
+import { formatIssue } from './issue_helpers.js'
 import { getGherkinScenarioLocationMap, getGherkinStepMap } from '@cucumber/cucumber/lib/formatter/helpers/gherkin_document_parser'
 import { getPickleStepMap } from '@cucumber/cucumber/lib/formatter/helpers/pickle_parser'
 

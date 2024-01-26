@@ -1,5 +1,5 @@
 import indentString from 'indent-string'
-import { formatTestCaseAttempt } from './test_case_attempt_formatter'
+import { formatTestCaseAttempt } from './test_case_attempt_formatter.js'
 
 export function formatIssue({
   colorFns,

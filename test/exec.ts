@@ -23,9 +23,8 @@ export const run = async (
 
   const configuration: Partial<IConfiguration> = {
     ...cucumberOptions,
-    format: [join(__dirname, '..')],
+    format: [join(__dirname, '..', 'index.js')],
     paths: [join('test', 'features', fileName)],
-    publishQuiet: true,
     require: [join(__dirname, 'features')],
   }
   const { runConfiguration } = await loadConfiguration({
