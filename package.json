@@ -1,6 +1,6 @@
 {
   "name": "cucumber-mb-summary-formatter",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
