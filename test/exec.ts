@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 import { join } from 'node:path'
 import { PassThrough } from 'node:stream'
 
