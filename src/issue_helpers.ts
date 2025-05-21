@@ -1,21 +1,39 @@
+import type * as messages from '@cucumber/messages'
 import indentString from 'indent-string'
+
+import { type IFormatTestCaseAttemptRequest } from './extractedTypes.js'
 import { formatTestCaseAttempt } from './test_case_attempt_formatter.js'
+
+type IFormatIssueRequest = IFormatTestCaseAttemptRequest & {
+  number: number
+}
+
+export function isFailure(
+  result: messages.TestStepResult,
+  willBeRetried = false
+): boolean {
+  return (
+    result.status === 'AMBIGUOUS' ||
+    result.status === 'UNDEFINED' ||
+    (result.status === 'FAILED' && !willBeRetried)
+  )
+}
 
 export function formatIssue({
   colorFns,
-  cwd,
   number,
   snippetBuilder,
   testCaseAttempt,
-  supportCodeLibrary
-}) {
+  supportCodeLibrary,
+  printAttachments = true,
+}: IFormatIssueRequest): string {
   const prefix = `${number.toString()}) `
   const formattedTestCaseAttempt = formatTestCaseAttempt({
     colorFns,
-    cwd,
     snippetBuilder,
     testCaseAttempt,
-    supportCodeLibrary
+    supportCodeLibrary,
+    printAttachments,
   })
   const lines = formattedTestCaseAttempt.split('\n')
   const updatedLines = lines.map((line, index) => {

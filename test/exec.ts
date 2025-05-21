@@ -1,25 +1,23 @@
-import {
-  IConfiguration,
-  loadConfiguration,
-  runCucumber,
-} from '@cucumber/cucumber/api'
-import * as glob from 'glob'
-import { join } from 'path'
-import { PassThrough } from 'stream'
-import * as streamToString from 'stream-to-string'
-import { promisify } from 'util'
+import { join } from 'node:path'
+import { PassThrough } from 'node:stream'
 
-export const run = async (
+import { type IConfiguration, loadConfiguration, runCucumber } from '@cucumber/cucumber/api'
+import { glob } from 'glob'
+import streamToString from 'stream-to-string'
+
+export const stepsSupportPath = 'lib/test/features/support/steps.js'
+
+export const run = async(
   fileName: string,
   cucumberOptions: Partial<IConfiguration> = {},
   throws = false
 ): Promise<string> => {
   // clear require cache for support code
-  const matches = await promisify(glob)('features/support/*', {
+  const matches = await glob('features/support/*', {
     absolute: true,
     cwd: __dirname,
   })
-  matches.forEach((match) => delete require.cache[match])
+  matches.forEach(match => delete require.cache[match])
 
   const configuration: Partial<IConfiguration> = {
     ...cucumberOptions,
@@ -38,8 +36,8 @@ export const run = async (
       stdout,
       stderr,
     })
-  } catch (ex) {
-    if (throws) {
+  } catch(ex) {
+    if(throws) {
       throw ex
     }
   }
