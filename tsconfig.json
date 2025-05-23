@@ -10,12 +10,11 @@
     "sourceMap": true,
     "inlineSources": true,
     "strict": true,
-    "target": "es2022",
-    "outDir": "lib/test",
-
+    "target": "es2022"
   },
   "include": [
-    "test/**/*"
+    "src/**/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": [
     "**/node_modules",
