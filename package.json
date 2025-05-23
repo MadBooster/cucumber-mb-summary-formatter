@@ -3,7 +3,10 @@
   "version": "0.0.16",
   "description": "",
   "main": "lib/index.js",
-  "files": ["lib/*.js", "lib/*.ts"],
+  "files": [
+    "lib/*.js",
+    "lib/*.ts"
+  ],
   "scripts": {
     "unit-test": "mocha src",
     "prepare": "npm run build",
@@ -20,7 +23,6 @@
   "license": "ISC",
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
-    "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.21",
     "eslint": "^9.27.0",
